@@ -15,6 +15,7 @@ listEncodeString = ('21', '22', '23', '24', '25', '26', '27', '28', '29', '2A', 
                     '3A', '3B', '3C', '3D', '3E', '3F', '40', '5B', '5C', '5D', '5E', '5F', '60', '7B', '7C',
                     '7D', '7E')
 
+
 def decodeString(arg):
     result = str(arg)
 
@@ -26,6 +27,7 @@ def decodeString(arg):
     result = result.replace(' ', '+')
 
     return result
+
 
 def mountRequest(url_request, args):
     args = dict(args)
@@ -39,6 +41,7 @@ def mountRequest(url_request, args):
         url_request += '&' + key + '=' + decodeString(value)
 
     return url_request
+
 
 def printDetails(film):
     if film['Response'].upper() == 'True'.upper():
@@ -58,6 +61,7 @@ def printDetails(film):
     else:
         print('Movie not found!')
 
+
 def printPosterFilm(link):
     if link != '':
         if downloadImage(link):
@@ -66,12 +70,14 @@ def printPosterFilm(link):
             except:
                 print('Error print poster!')
 
+
 def showImage(nameImage):
     imageWindow = tkinter.Tk()
     img = ImageTk.PhotoImage(Image.open(nameImage))
     panel = tkinter.Label(imageWindow, image=img)
     panel.pack(side="bottom", fill="both", expand="yes")
     imageWindow.mainloop()
+
 
 def downloadImage(link):
     try:
@@ -83,6 +89,7 @@ def downloadImage(link):
     except:
         print('Error print film poster!')
         return False
+
 
 def consummerAPI(urlRequest):
     try:
