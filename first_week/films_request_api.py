@@ -2,32 +2,8 @@ import requests
 import json
 import shutil
 import tkinter
+import urllib.parse
 from PIL import ImageTk, Image
-
-'''
-TODO: refactor using regular expression
-'''
-listDecodeString = ('!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/',
-                    ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|',
-                    '}', '~')
-
-listEncodeString = ('21', '22', '23', '24', '25', '26', '27', '28', '29', '2A', '2B', '2C', '2D', '2E', '2F'
-                    '3A', '3B', '3C', '3D', '3E', '3F', '40', '5B', '5C', '5D', '5E', '5F', '60', '7B', '7C',
-                    '7D', '7E')
-
-
-def decodeString(arg):
-    result = str(arg)
-
-    for chr in str(arg):
-        if chr in listDecodeString:
-            position = listDecodeString.index(chr)
-            result = result.replace(chr, ''.join(['#', listEncodeString[position]]))
-
-    result = result.replace(' ', '+')
-
-    return result
-
 
 def mountRequest(url_request, args):
     args = dict(args)
@@ -38,7 +14,7 @@ def mountRequest(url_request, args):
     url_request += key + '=' + value
 
     for key, value in args.items():
-        url_request += '&' + key + '=' + decodeString(value)
+        url_request += '&' + key + '=' + urllib.parse.quote_plus(value)
 
     return url_request
 
