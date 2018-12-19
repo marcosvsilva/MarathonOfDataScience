@@ -59,8 +59,8 @@ def show_image(name_image):
 def download_image(link):
     try:
         request = requests.get(link, stream=True)
-        with open('poster.png', 'wb') as imageOut:
-            shutil.copyfileobj(request.raw, imageOut)
+        with open('poster.png', 'wb') as image_out:
+            shutil.copyfileobj(request.raw, image_out)
         del request
         return True
     except:
