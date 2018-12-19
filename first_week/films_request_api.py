@@ -5,21 +5,22 @@ import tkinter
 import urllib.parse
 from PIL import ImageTk, Image
 
-def mountRequest(url_request, args):
-    args = dict(args)
-    url_request = str(url_request)
-    key, value = args.popitem()
 
-    url_request += '?'
-    url_request += key + '=' + value
+def mount_request(url, parameters):
+    parameters = dict(parameters)
+    url = str(url)
+    key, value = parameters.popitem()
 
-    for key, value in args.items():
-        url_request += '&' + key + '=' + urllib.parse.quote_plus(value)
+    url += '?'
+    url += key + '=' + value
 
-    return url_request
+    for key, value in parameters.items():
+        url += '&' + key + '=' + urllib.parse.quote_plus(value)
+
+    return url
 
 
-def printDetails(film):
+def print_details(film):
     if film['Response'].upper() == 'True'.upper():
         print('Title: ' + film['Title'])
         print('Year: ' + film['Year'])
@@ -38,24 +39,24 @@ def printDetails(film):
         print('Movie not found!')
 
 
-def printPosterFilm(link):
+def print_poster_film(link):
     if link != '':
-        if downloadImage(link):
+        if download_image(link):
             try:
-                showImage('poster.png')
+                show_image('poster.png')
             except:
                 print('Error print poster!')
 
 
-def showImage(nameImage):
-    imageWindow = tkinter.Tk()
-    img = ImageTk.PhotoImage(Image.open(nameImage))
-    panel = tkinter.Label(imageWindow, image=img)
+def show_image(name_image):
+    image_window = tkinter.Tk()
+    photo_image = ImageTk.PhotoImage(Image.open(name_image))
+    panel = tkinter.Label(image_window, image=photo_image)
     panel.pack(side="bottom", fill="both", expand="yes")
-    imageWindow.mainloop()
+    image_window.mainloop()
 
 
-def downloadImage(link):
+def download_image(link):
     try:
         request = requests.get(link, stream=True)
         with open('poster.png', 'wb') as imageOut:
@@ -67,11 +68,11 @@ def downloadImage(link):
         return False
 
 
-def consummerAPI(urlRequest):
+def consummer_api(url_request):
     try:
-        request = requests.get(urlRequest)
-        resultJSON = json.loads(request.text)
-        return resultJSON
+        request = requests.get(url_request)
+        result_json = json.loads(request.text)
+        return result_json
     except:
         print('Error connection!')
         return None
@@ -97,7 +98,7 @@ except:
 ##Api Key
 args.update({'apikey': '56e8adf3'})
 
-resumeFilm = consummerAPI(mountRequest(url_request, args))
-if resumeFilm != None:
-    printDetails(resumeFilm)
-    printPosterFilm(resumeFilm['Poster'])
+resume_film = consummer_api(mount_request(url_request, args))
+if resume_film != None:
+    print_details(resume_film)
+    print_poster_film(resume_film['Poster'])

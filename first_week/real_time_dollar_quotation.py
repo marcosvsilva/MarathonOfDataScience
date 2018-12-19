@@ -3,36 +3,40 @@ import json
 import time
 import os
 
-urlAPI = 'http://data.fixer.io/api/'
-functionAPI = 'latest'
-keyAPI = {'access_key': 'a2b8a8bef4afe16011dfc7a74976b848'}
-baseAPI = {'base': 'BRL'}
-timeForSleep = 5
-clear = lambda : os.system('cls')
+url_api = 'http://data.fixer.io/api/'
+function_api = 'latest'
+key_api = {'access_key': 'a2b8a8bef4afe16011dfc7a74976b848'}
+base_api = {'base': 'BRL'}
+time_sleep = 5
 
-keysAPI = {
+keys_api = {
     'success': 'success',
     'block': 'rates',
     'valueBRL': 'BRL',
     'valueUSD': 'USD'
 }
 
-def consumerAPI(url):
+
+def clear():
+    os.system('cls')
+
+
+def consumer_api(url):
     result = None
 
     try:
         request = requests.get(url)
-        resultJSON = json.loads(request.text)
+        result_json = json.loads(request.text)
 
-        if resultJSON[keysAPI['success']]:
-            result = resultJSON
+        if result_json[keys_api['success']]:
+            result = result_json
     except:
         print("API Consumer error!")
 
     return result
 
 
-def encodeURL(url, function, args):
+def encode_url(url, function, args):
     result = str(url)
     result += function
 
@@ -43,18 +47,18 @@ def encodeURL(url, function, args):
     return result
 
 
-def printLoading():
+def print_loading():
     clear()
     print('|-------------------------------------')
     print('|Refrash, Loading...')
     print('|-------------------------------------')
 
 
-def printQuotation(valueBRL, valueUSD):
-    valueB = float(valueBRL)
-    valueU = float(valueUSD)
+def print_quotation(brl, usd):
+    value_brl = float(brl)
+    value_usd = float(usd)
 
-    value = valueB - valueU
+    value = value_brl - value_usd
 
     clear()
     print('|-------------------------------------')
@@ -68,16 +72,16 @@ def printQuotation(valueBRL, valueUSD):
 
 def main():
     while True:
-        printLoading()
+        print_loading()
         parameters = {}
-        parameters.update(keyAPI)
+        parameters.update(key_api)
         #API free version does not support changing base
         #parameters.update(baseAPI)
-        urlAPIEncode = encodeURL(urlAPI, functionAPI, parameters)
-        jsonResponse = consumerAPI(urlAPIEncode)
-        jsonBlok = jsonResponse[keysAPI['block']]
-        printQuotation(jsonBlok[keysAPI['valueBRL']], jsonBlok[keysAPI['valueUSD']])
-        time.sleep(timeForSleep)
+        url_api_encode = encode_url(url_api, function_api, parameters)
+        json_response = consumer_api(url_api_encode)
+        json_blok = json_response[keys_api['block']]
+        print_quotation(json_blok[keys_api['valueBRL']], json_blok[keys_api['valueUSD']])
+        time.sleep(time_sleep)
 
 
 main()

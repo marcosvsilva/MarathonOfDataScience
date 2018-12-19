@@ -3,14 +3,14 @@ import json
 import pprint
 import urllib.parse
 
-keyAPI = ''
-keySecretAPI = ''
+key = ''
+key_secret = ''
 
-keyTokenAPI = ''
-keyTokenSecretAPI = ''
+token = ''
+token_secret = ''
 
-consumer = oauth.Consumer(keyAPI, keySecretAPI)
-token = oauth.Token(keyTokenAPI, keyTokenSecretAPI)
+consumer = oauth.Consumer(key, key_secret)
+token = oauth.Token(token, token_secret)
 client = oauth.Client(consumer, token)
 
 search = str(input('Pesquisa: '))
