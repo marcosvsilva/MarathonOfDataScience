@@ -32,52 +32,78 @@ def parse_maybe_int(number):
 
     return result
 
+def change_column_acct(archive):
+    result = []
+    for row in list(archive):
+        row_dict = dict(row)
+        row_dict.update(dict(account_key=row_dict['acct']))
+        del[row_dict['acct']]
+        result.append(row_dict)
+    return result
+
 
 enrollments = read_csv('dataset/enrollments.csv')
 daily_engagement = read_csv('dataset/daily_engagement.csv')
 project_submissions = read_csv('dataset/project_submissions.csv')
+daily_engagement = change_column_acct(daily_engagement)
 
-keys_enrollment = []
+enrollments_unique_keys = set()
+enrollments_aux = []
+enrollments_remove = []
 for enrollment in enrollments:
-    enrollment['cancel_date'] = parse_date(enrollment['cancel_date'])
-    enrollment['days_to_cancel'] = parse_maybe_int(enrollment['days_to_cancel'])
-    enrollment['is_canceled'] = enrollment['is_canceled'] == 'True'
-    enrollment['is_udacity'] = enrollment['is_udacity'] == 'True'
-    enrollment['join_date'] = parse_date(enrollment['join_date'])
-    if enrollment['account_key'] not in keys_enrollment:
-        keys_enrollment.append(enrollment['account_key'])
+    if enrollment['is_udacity'] != 'True':
+        enrollment['cancel_date'] = parse_date(enrollment['cancel_date'])
+        enrollment['days_to_cancel'] = parse_maybe_int(enrollment['days_to_cancel'])
+        enrollment['is_canceled'] = enrollment['is_canceled'] == 'True'
+        enrollment['join_date'] = parse_date(enrollment['join_date'])
+        enrollments_unique_keys.add(enrollment['account_key'])
+        enrollments_aux.append(enrollment)
+    else:
+        enrollments_remove.append(enrollment['account_key'])
 
 
-keys_daily_engagement = []
-for engagement_record in daily_engagement:
-    engagement_record['lessons_completed'] = int(float(engagement_record['lessons_completed']))
-    engagement_record['num_courses_visited'] = int(float(engagement_record['num_courses_visited']))
-    engagement_record['projects_completed'] = int(float(engagement_record['projects_completed']))
-    engagement_record['total_minutes_visited'] = float(engagement_record['total_minutes_visited'])
-    engagement_record['utc_date'] = parse_date(engagement_record['utc_date'])
-    if engagement_record['acct'] not in keys_daily_engagement:
-        keys_daily_engagement.append(engagement_record['acct'])
+enrollments = enrollments_aux
 
-keys_project_submissions = []
+engagement_unique_key = set()
+daily_engagement_aux = []
+for engagement in daily_engagement:
+    if engagement['account_key'] not in enrollments_remove:
+        engagement['lessons_completed'] = int(float(engagement['lessons_completed']))
+        engagement['num_courses_visited'] = int(float(engagement['num_courses_visited']))
+        engagement['projects_completed'] = int(float(engagement['projects_completed']))
+        engagement['total_minutes_visited'] = float(engagement['total_minutes_visited'])
+        engagement['utc_date'] = parse_date(engagement['utc_date'])
+        engagement_unique_key.add(engagement['account_key'])
+        daily_engagement_aux.append(engagement)
+
+daily_engagement = daily_engagement_aux
+
+submissions_unique_key = set()
+project_submissions_aux = []
 for submission in project_submissions:
-    submission['completion_date'] = parse_date(submission['completion_date'])
-    submission['creation_date'] = parse_date(submission['creation_date'])
-    if (submission['account_key'], submission['lesson_key']) not in keys_project_submissions:
-        keys_project_submissions.append((submission['account_key'], submission['lesson_key']))
+    if submission['account_key'] not in enrollments_remove:
+        submission['completion_date'] = parse_date(submission['completion_date'])
+        submission['creation_date'] = parse_date(submission['creation_date'])
+        submissions_unique_key.add(submission['account_key'])
+        project_submissions_aux.append(submission)
 
-enrollment_num_rows = len(enrollments)
-engagement_num_rows = len(daily_engagement)
-submission_num_rows = len(project_submissions)
+project_submissions = project_submissions_aux
 
-enrollment_num_unique_students = len(keys_enrollment)
-engagement_num_unique_students = len(keys_daily_engagement)
-submission_num_unique_students = len(keys_project_submissions)
+print('For table enrollments, exists', len(enrollments),
+      'and', len(enrollments_unique_keys), 'primary key.')
 
-print('For table enrollments, exists', enrollment_num_rows,
-      'and', enrollment_num_unique_students, 'primary key.')
+print('For table daily_engagement, exists', len(daily_engagement),
+      'and', len(engagement_unique_key), 'primary key.')
 
-print('For table daily_engagement, exists', engagement_num_rows,
-      'and', engagement_num_unique_students, 'primary key.')
+print('For table project_submissions, exists', len(project_submissions),
+      'and', len(submissions_unique_key), 'primary key.')
 
-print('For table project_submissions, exists', submission_num_rows,
-      'and', submission_num_unique_students, 'primary key.')
+paid_students = {}
+for enrollment in enrollments:
+    if (not enrollment['is_canceled']) or (enrollment['days_to_cancel'] > 7):
+        account_key = enrollment['account_key']
+        join_date = enrollment['join_date']
+        paid_student = {account_key: join_date}
+
+        if (account_key not in paid_students) or (join_date > paid_students[account_key]):
+            paid_students[account_key] = join_date
