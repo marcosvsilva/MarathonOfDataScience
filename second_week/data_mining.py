@@ -41,6 +41,19 @@ def change_column_acct(archive):
         result.append(row_dict)
     return result
 
+def remove_trial(data):
+    new_data = []
+    for element_data in data:
+        if (not element_data['is_canceled']) or (element_data['days_to_cancel'] > 7):
+            account_key = element_data['account_key']
+            join_date = element_data['join_date']
+            dict = {account_key: join_date}
+
+            if (dict not in new_data) or (join_date > new_data[account_key]):
+                new_data[account_key] = join_date
+
+        return new_data
+
 
 enrollments = read_csv('dataset/enrollments.csv')
 daily_engagement = read_csv('dataset/daily_engagement.csv')
@@ -98,12 +111,11 @@ print('For table daily_engagement, exists', len(daily_engagement),
 print('For table project_submissions, exists', len(project_submissions),
       'and', len(submissions_unique_key), 'primary key.')
 
-paid_students = {}
-for enrollment in enrollments:
-    if (not enrollment['is_canceled']) or (enrollment['days_to_cancel'] > 7):
-        account_key = enrollment['account_key']
-        join_date = enrollment['join_date']
-        paid_student = {account_key: join_date}
 
-        if (account_key not in paid_students) or (join_date > paid_students[account_key]):
-            paid_students[account_key] = join_date
+paid_students = remove_trial(enrollments)
+paid_engament = remove_trial(engagement)
+paid_submissions = remove_trial(project_submissions)
+
+print(len(paid_students))
+print(len(paid_engament))
+print(len(paid_submissions))
