@@ -32,27 +32,24 @@ def parse_maybe_int(number):
 
     return result
 
+
 def change_column_acct(archive):
     result = []
     for row in list(archive):
         row_dict = dict(row)
-        row_dict.update(dict(account_key=row_dict['acct']))
+        row_dict.update({'account_key': row_dict['acct']})
         del[row_dict['acct']]
         result.append(row_dict)
     return result
 
-def remove_trial(data):
+
+def remove_trial_students(data, paid_students):
     new_data = []
-    for element_data in data:
-        if (not element_data['is_canceled']) or (element_data['days_to_cancel'] > 7):
-            account_key = element_data['account_key']
-            join_date = element_data['join_date']
-            dict = {account_key: join_date}
+    for data_element in data:
+        if data_element['account_key'] in paid_students:
+            new_data.append(data_element)
 
-            if (dict not in new_data) or (join_date > new_data[account_key]):
-                new_data[account_key] = join_date
-
-        return new_data
+    return  new_data
 
 
 enrollments = read_csv('dataset/enrollments.csv')
@@ -73,7 +70,6 @@ for enrollment in enrollments:
         enrollments_aux.append(enrollment)
     else:
         enrollments_remove.append(enrollment['account_key'])
-
 
 enrollments = enrollments_aux
 
@@ -111,11 +107,34 @@ print('For table daily_engagement, exists', len(daily_engagement),
 print('For table project_submissions, exists', len(project_submissions),
       'and', len(submissions_unique_key), 'primary key.')
 
+paid_students = {}
+for enrollment in enrollments:
+    if not enrollment['is_canceled'] or enrollment['days_to_cancel'] > 7:
+        account_key = enrollment['account_key']
+        enrollment_date = enrollment['join_date']
+        paid_students[account_key] = enrollment_date
 
-paid_students = remove_trial(enrollments)
-paid_engament = remove_trial(engagement)
-paid_submissions = remove_trial(project_submissions)
+        if account_key not in paid_students or \
+                enrollment_date > paid_students[account_key]:
+            paid_students[account_key] = enrollment_date
 
-print(len(paid_students))
-print(len(paid_engament))
-print(len(paid_submissions))
+paid_enrollments = remove_trial_students(enrollments, paid_students)
+paid_project_submissions = remove_trial_students(project_submissions, paid_students)
+paid_daily_engagement = remove_trial_students(daily_engagement, paid_students)
+
+print('Exists', len(paid_students), 'paid students.')
+print('For table enrollments, exists', len(paid_enrollments), 'for paid students.')
+print('For table daily_engagement, exists', len(paid_project_submissions), 'for paid students.')
+print('For table project_submissions, exists', len(paid_daily_engagement), 'for paid students.')
+
+paid_students_first_week = []
+for engagement in paid_daily_engagement:
+    account_key = engagement['account_key']
+    join_date = paid_students[account_key]
+    engagement_record_date = engagement['utc_date']
+    days_current_project = engagement_record_date - join_date
+
+    if days_current_project.days < 7:
+        paid_students_first_week.append(engagement)
+
+print('Exists', len(paid_students_first_week), 'student finally project in one week.')
