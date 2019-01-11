@@ -1,5 +1,7 @@
 import unicodecsv
+import numpy as np
 from datetime import datetime
+from collections import defaultdict
 
 
 def read_csv(archive):
@@ -134,7 +136,29 @@ for engagement in paid_daily_engagement:
     engagement_record_date = engagement['utc_date']
     days_current_project = engagement_record_date - join_date
 
-    if days_current_project.days < 7:
+    if 0 <= days_current_project.days < 7:
         paid_students_first_week.append(engagement)
 
 print('Exists', len(paid_students_first_week), 'student finally project in one week.')
+
+engagement_by_account = defaultdict(list)
+for engagement_record in paid_students_first_week:
+    account_key = engagement_record['account_key']
+    engagement_by_account[account_key].append(engagement_record)
+
+total_minutes_by_account = {}
+for account_key, engagement_for_student in engagement_by_account.items():
+    total_minutes = 0
+    for engagement_record in engagement_for_student:
+        total_minutes += engagement_record['total_minutes_visited']
+    total_minutes_by_account[account_key] = total_minutes
+
+total_minutes = total_minutes_by_account.values()
+print(total_minutes)
+
+print('Mean:', np.mean(total_minutes))
+'''
+print('Standard deviation:', np.mean(total_minutes))
+print('Minimum:', np.mean(total_minutes))
+print('Maximum:', np.mean(total_minutes))
+'''
