@@ -157,6 +157,8 @@ total_minutes = total_minutes_by_account.values()
 print(total_minutes)
 
 print('Mean:', np.mean(total_minutes))
+print('Mean:', np.maximum(total_minutes))
+print('Mean:', np.minimum(total_minutes))
 '''
 print('Standard deviation:', np.mean(total_minutes))
 print('Minimum:', np.mean(total_minutes))
