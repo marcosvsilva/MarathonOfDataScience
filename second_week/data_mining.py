@@ -36,13 +36,10 @@ def parse_maybe_int(number):
 
 
 def change_column_acct(archive):
-    result = []
-    for row in list(archive):
-        row_dict = dict(row)
-        row_dict.update({'account_key': row_dict['acct']})
-        del[row_dict['acct']]
-        result.append(row_dict)
-    return result
+    for row in archive:
+        row['account_key'] = row['acct']
+        del[row['acct']]
+    return archive
 
 
 def remove_trial_students(data, paid_students):
@@ -55,8 +52,8 @@ def remove_trial_students(data, paid_students):
 
 
 ''' 
-1. Read CSV
-2. Normalize keys
+Read CSV
+Normalize keys
 '''
 
 enrollments = read_csv('dataset/enrollments.csv')
@@ -65,115 +62,65 @@ project_submissions = read_csv('dataset/project_submissions.csv')
 daily_engagement = change_column_acct(daily_engagement)
 
 ''' 
-1. Convert types
-2. Extract unique keys
-3. Prepare dataset
+Convert types
 '''
 
-enrollments_unique_keys = set()
-enrollments_aux = []
-enrollments_remove = []
 for enrollment in enrollments:
-    if enrollment['is_udacity'] != 'True':
-        enrollment['cancel_date'] = parse_date(enrollment['cancel_date'])
-        enrollment['days_to_cancel'] = parse_maybe_int(enrollment['days_to_cancel'])
-        enrollment['is_canceled'] = enrollment['is_canceled'] == 'True'
-        enrollment['join_date'] = parse_date(enrollment['join_date'])
-        enrollments_unique_keys.add(enrollment['account_key'])
-        enrollments_aux.append(enrollment)
-    else:
-        enrollments_remove.append(enrollment['account_key'])
+    enrollment['cancel_date'] = parse_date(enrollment['cancel_date'])
+    enrollment['days_to_cancel'] = parse_maybe_int(enrollment['days_to_cancel'])
+    enrollment['is_canceled'] = enrollment['is_canceled'] == 'True'
+    enrollment['join_date'] = parse_date(enrollment['join_date'])
 
-enrollments = enrollments_aux
-
-engagement_unique_key = set()
-daily_engagement_aux = []
 for engagement in daily_engagement:
-    if engagement['account_key'] not in enrollments_remove:
-        engagement['lessons_completed'] = int(float(engagement['lessons_completed']))
-        engagement['num_courses_visited'] = int(float(engagement['num_courses_visited']))
-        engagement['projects_completed'] = int(float(engagement['projects_completed']))
-        engagement['total_minutes_visited'] = float(engagement['total_minutes_visited'])
-        engagement['utc_date'] = parse_date(engagement['utc_date'])
-        engagement_unique_key.add(engagement['account_key'])
-        daily_engagement_aux.append(engagement)
+    engagement['lessons_completed'] = int(float(engagement['lessons_completed']))
+    engagement['num_courses_visited'] = int(float(engagement['num_courses_visited']))
+    engagement['projects_completed'] = int(float(engagement['projects_completed']))
+    engagement['total_minutes_visited'] = float(engagement['total_minutes_visited'])
+    engagement['utc_date'] = parse_date(engagement['utc_date'])
 
-daily_engagement = daily_engagement_aux
-
-submissions_unique_key = set()
-project_submissions_aux = []
 for submission in project_submissions:
-    if submission['account_key'] not in enrollments_remove:
-        submission['completion_date'] = parse_date(submission['completion_date'])
-        submission['creation_date'] = parse_date(submission['creation_date'])
-        submissions_unique_key.add(submission['account_key'])
-        project_submissions_aux.append(submission)
-
-project_submissions = project_submissions_aux
+    submission['completion_date'] = parse_date(submission['completion_date'])
+    submission['creation_date'] = parse_date(submission['creation_date'])
 
 '''
-
+Extract unique enrollment
 '''
 
-print('For table enrollments, exists', len(enrollments),
-      'and', len(enrollments_unique_keys), 'primary key.')
-
-print('For table daily_engagement, exists', len(daily_engagement),
-      'and', len(engagement_unique_key), 'primary key.')
-
-print('For table project_submissions, exists', len(project_submissions),
-      'and', len(submissions_unique_key), 'primary key.')
-
-paid_students = {}
+unique_enrollments = set()
 for enrollment in enrollments:
-    if not enrollment['is_canceled'] or enrollment['days_to_cancel'] > 7:
-        account_key = enrollment['account_key']
-        enrollment_date = enrollment['join_date']
-        paid_students[account_key] = enrollment_date
+    unique_enrollments.add(enrollment['account_key'])
 
-        if account_key not in paid_students or \
-                enrollment_date > paid_students[account_key]:
-            paid_students[account_key] = enrollment_date
+unique_engagements = set()
+for engagement in daily_engagement:
+    unique_engagements.add(engagement['account_key'])
 
-paid_enrollments = remove_trial_students(enrollments, paid_students)
-paid_project_submissions = remove_trial_students(project_submissions, paid_students)
-paid_daily_engagement = remove_trial_students(daily_engagement, paid_students)
+unique_submission = set()
+for submission in project_submissions:
+    unique_submission.add(submission['account_key'])
 
-print('Exists', len(paid_students), 'paid students.')
+'''
+1. How many students are enrolled but do not have any work days?
+'''
+
+numbers_of_records = 0
+for unique_enrollment in unique_enrollments:
+    if unique_enrollment not in unique_engagements:
+        numbers_of_records += 1
+
 print('\n')
+print("1. How many students are enrolled but do not have any work days?")
+print(numbers_of_records, "enrollments.")
 
-print('For table enrollments, exists', len(paid_enrollments), 'for paid students.')
-print('For table daily_engagement, exists', len(paid_project_submissions), 'for paid students.')
-print('For table project_submissions, exists', len(paid_daily_engagement), 'for paid students.')
+'''
+2. How many students are enrolled at least a day, but do not have any work days?
+'''
 
-paid_students_first_week = []
-for engagement in paid_daily_engagement:
-    account_key = engagement['account_key']
-    join_date = paid_students[account_key]
-    engagement_record_date = engagement['utc_date']
-    days_current_project = engagement_record_date - join_date
+numbers_of_records = 0
+for enrollment in enrollments:
+    if enrollment['cancel_date'] != enrollment['join_date']:
+        if enrollment['account_key'] not in unique_engagements:
+            numbers_of_records += 1
 
-    if 0 <= days_current_project.days < 7:
-        paid_students_first_week.append(engagement)
-
-print('Exists', len(paid_students_first_week), 'student finally project in one week.')
 print('\n')
-
-engagement_by_account = defaultdict(list)
-for engagement_record in paid_students_first_week:
-    account_key = engagement_record['account_key']
-    engagement_by_account[account_key].append(engagement_record)
-
-total_minutes_by_account = {}
-for account_key, engagement_for_student in engagement_by_account.items():
-    total_minutes = 0
-    for engagement_record in engagement_for_student:
-        total_minutes += engagement_record['total_minutes_visited']
-    total_minutes_by_account[account_key] = total_minutes
-
-total_minutes = list(total_minutes_by_account.values())
-
-print('Mean:', np.mean(total_minutes))
-print('Standard deviation:', np.s (total_minutes))
-print('Minimum:', np.mean(total_minutes))
-print('Maximum:', np.mean(total_minutes))
+print("2. How many students are enrolled at least a day, but do not have any work days?")
+print(numbers_of_records, 'enrollments.')
