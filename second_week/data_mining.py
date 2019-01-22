@@ -54,10 +54,21 @@ def remove_trial_students(data, paid_students):
     return  new_data
 
 
+''' 
+1. Read CSV
+2. Normalize keys
+'''
+
 enrollments = read_csv('dataset/enrollments.csv')
 daily_engagement = read_csv('dataset/daily_engagement.csv')
 project_submissions = read_csv('dataset/project_submissions.csv')
 daily_engagement = change_column_acct(daily_engagement)
+
+''' 
+1. Convert types
+2. Extract unique keys
+3. Prepare dataset
+'''
 
 enrollments_unique_keys = set()
 enrollments_aux = []
@@ -100,6 +111,10 @@ for submission in project_submissions:
 
 project_submissions = project_submissions_aux
 
+'''
+
+'''
+
 print('For table enrollments, exists', len(enrollments),
       'and', len(enrollments_unique_keys), 'primary key.')
 
@@ -125,6 +140,8 @@ paid_project_submissions = remove_trial_students(project_submissions, paid_stude
 paid_daily_engagement = remove_trial_students(daily_engagement, paid_students)
 
 print('Exists', len(paid_students), 'paid students.')
+print('\n')
+
 print('For table enrollments, exists', len(paid_enrollments), 'for paid students.')
 print('For table daily_engagement, exists', len(paid_project_submissions), 'for paid students.')
 print('For table project_submissions, exists', len(paid_daily_engagement), 'for paid students.')
@@ -140,6 +157,7 @@ for engagement in paid_daily_engagement:
         paid_students_first_week.append(engagement)
 
 print('Exists', len(paid_students_first_week), 'student finally project in one week.')
+print('\n')
 
 engagement_by_account = defaultdict(list)
 for engagement_record in paid_students_first_week:
@@ -153,14 +171,9 @@ for account_key, engagement_for_student in engagement_by_account.items():
         total_minutes += engagement_record['total_minutes_visited']
     total_minutes_by_account[account_key] = total_minutes
 
-total_minutes = total_minutes_by_account.values()
-print(total_minutes)
+total_minutes = list(total_minutes_by_account.values())
 
 print('Mean:', np.mean(total_minutes))
-print('Mean:', np.maximum(total_minutes))
-print('Mean:', np.minimum(total_minutes))
-'''
-print('Standard deviation:', np.mean(total_minutes))
+print('Standard deviation:', np.s (total_minutes))
 print('Minimum:', np.mean(total_minutes))
 print('Maximum:', np.mean(total_minutes))
-'''
