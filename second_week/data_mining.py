@@ -185,7 +185,8 @@ for engagement in daily_engagement_paid:
 
     if account_key in paid_students:
         if utc_date is not None:
-            if (utc_date - paid_students[account_key]).days < 7:
+            delta = (utc_date - paid_students[account_key])
+            if (delta.days < 7) and (delta.days >= 0):
                 paid_engagement_in_first_week.append(engagement)
 
 print('\n')
@@ -216,3 +217,21 @@ print('Mean:', np.mean(total_minutes))
 print('Standard deviation:', np.std(total_minutes, axis=0))
 print('Maximum:', np.max(total_minutes))
 print('Minimum:', np.min(total_minutes))
+
+
+'''
+8. Investigate the student who has the largest amount of time spent in a week
+'''
+
+student_with_max_minutes = None
+max_minutes = 0
+for account_key, minutes in total_minutes_by_account.items():
+    if minutes > max_minutes:
+        max_minutes = minutes
+        student_with_max_minutes = account_key
+
+print('\n')
+print(student_with_max_minutes)
+
+for element in engagement_by_account[student_with_max_minutes]:
+    print(element)
