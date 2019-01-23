@@ -191,3 +191,28 @@ for engagement in daily_engagement_paid:
 print('\n')
 print('5. How many students worked for one week after enrollment?')
 print(len(paid_engagement_in_first_week), 'students.')
+
+'''
+7. Calculate the average time spent for each student in the first week.
+'''
+
+engagement_by_account = defaultdict(list)
+for engagement in paid_engagement_in_first_week:
+    account_key = engagement['account_key']
+    engagement_by_account[account_key].append(engagement)
+
+total_minutes_by_account = {}
+for account_key, engagement_list in engagement_by_account.items():
+    total_minutes = 0
+    for engagement in engagement_list:
+        total_minutes += engagement['total_minutes_visited']
+    total_minutes_by_account[account_key] = total_minutes
+
+total_minutes = list(total_minutes_by_account.values())
+
+print('\n')
+print('7. Average time spent in one week of studies')
+print('Mean:', np.mean(total_minutes))
+print('Standard deviation:', np.std(total_minutes, axis=0))
+print('Maximum:', np.max(total_minutes))
+print('Minimum:', np.min(total_minutes))
