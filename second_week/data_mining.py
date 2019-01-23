@@ -35,20 +35,27 @@ def parse_maybe_int(number):
     return result
 
 
-def change_column_acct(archive):
-    for row in archive:
-        row['account_key'] = row['acct']
-        del[row['acct']]
-    return archive
+def change_column_acct(data):
+    for data_element in data:
+        data_element['account_key'] = data_element['acct']
+        del[data_element['acct']]
+    return data
 
 
-def remove_trial_students(data, paid_students):
+def remove_udacity_accounts(data, udacity_accounts):
     new_data = []
     for data_element in data:
-        if data_element['account_key'] in paid_students:
+        if data_element['account_key'] not in udacity_accounts:
             new_data.append(data_element)
+    return new_data
 
-    return  new_data
+
+def remove_trial_accounts(data, paid_accounts):
+    new_data = []
+    for data_element in data:
+        if data_element['account_key'] in paid_accounts:
+            new_data.append(data_element)
+    return new_data
 
 
 ''' 
@@ -124,3 +131,63 @@ for enrollment in enrollments:
 print('\n')
 print("2. How many students are enrolled at least a day, but do not have any work days?")
 print(numbers_of_records, 'enrollments.')
+
+'''
+3. Remove udacity test accounts from datasets
+'''
+
+enrollments_udacity = set()
+for enrollment in enrollments:
+    if enrollment['is_udacity'] == 'True':
+        enrollments_udacity.add(enrollment['account_key'])
+
+enrollments = remove_udacity_accounts(enrollments, enrollments_udacity)
+daily_engagement = remove_udacity_accounts(daily_engagement, enrollments_udacity)
+project_submissions = remove_udacity_accounts(project_submissions, enrollments_udacity)
+
+print('\n')
+print('3. How many registrations are left after removing all udacity test accounts?')
+print('Enrollments: ', len(enrollments))
+print('Daily engagement: ', len(daily_engagement))
+print('Project submissions: ', len(project_submissions))
+
+'''
+4. How many students have passed the free test and are still working?
+'''
+
+paid_students = {}
+for enrollment in enrollments:
+    join_data = enrollment['join_date']
+    account_key = enrollment['account_key']
+    days_to_cancel = enrollment['days_to_cancel']
+    canceled = enrollment['is_canceled']
+
+    if (not canceled) or ((days_to_cancel is not None) and (days_to_cancel > 7)):
+        if (account_key not in paid_students) or (paid_students[account_key] < join_data):
+            paid_students[account_key] = join_data
+
+print('\n')
+print('4. How many students have passed the free test and are still working?')
+print(len(paid_students), 'students.')
+
+'''
+5. How many students worked for one week after enrollment
+'''
+
+enrollments_paid = remove_trial_accounts(enrollments, paid_students)
+daily_engagement_paid = remove_trial_accounts(daily_engagement, paid_students)
+project_submissions_paid = remove_trial_accounts(project_submissions, paid_students)
+
+paid_engagement_in_first_week = []
+for engagement in daily_engagement_paid:
+    account_key = engagement['account_key']
+    utc_date = engagement['utc_date']
+
+    if account_key in paid_students:
+        if utc_date is not None:
+            if (utc_date - paid_students[account_key]).days < 7:
+                paid_engagement_in_first_week.append(engagement)
+
+print('\n')
+print('5. How many students worked for one week after enrollment?')
+print(len(paid_engagement_in_first_week), 'students.')
