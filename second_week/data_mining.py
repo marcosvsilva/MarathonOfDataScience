@@ -278,3 +278,35 @@ total_days_visit = list(total_days_visit_by_account.values())
 print('\n')
 print('10. Investigate the number of days that students visit the courses')
 print_stastistics(total_days_visit)
+
+'''
+11. Investigating approved and disapproved students
+'''
+
+subway_project_lesson_keys = ['746169184', '3176718735']
+passing_engagement_all = set()
+
+for submission in project_submissions_paid:
+    account_key = submission['account_key']
+    lesson_key = submission['lesson_key']
+    assigned_rating = submission['assigned_rating']
+
+    if lesson_key in subway_project_lesson_keys:
+        if (assigned_rating == 'PASSED') or (assigned_rating == 'DISTINCTION'):
+            passing_engagement_all.add(account_key)
+
+passing_engagement = []
+non_passing_engagement = []
+
+for engagement in paid_engagement_in_first_week:
+    account_key = engagement['account_key']
+
+    if account_key in passing_engagement_all:
+        passing_engagement.append(account_key)
+    else:
+        non_passing_engagement.append(account_key)
+
+print('\n')
+print('11. Investigating approved and disapproved students')
+print('exists', len(passing_engagement), 'passaing engagement.')
+print('exists', len(non_passing_engagement), 'non passaing engagement.')
