@@ -260,3 +260,21 @@ total_lessons_completed = list(total_lessons_completed_by_account.values())
 print('\n')
 print('9. Total activities carried out in one week of studies')
 print_stastistics(total_lessons_completed)
+
+'''
+10. Investigate the number of days that students visit the courses
+'''
+
+for account_key, list_engagement in engagement_by_account.items():
+    for engagement in list_engagement:
+        if engagement['num_courses_visited'] > 0:
+            engagement['has_visited'] = 1
+        else:
+            engagement['has_visited'] = 0
+
+total_days_visit_by_account = sum_group_account(engagement_by_account, 'has_visited')
+total_days_visit = list(total_days_visit_by_account.values())
+
+print('\n')
+print('10. Investigate the number of days that students visit the courses')
+print_stastistics(total_days_visit)
