@@ -58,6 +58,45 @@ def remove_trial_accounts(data, paid_accounts):
     return new_data
 
 
+def elements_in_first_week(data, data_paid, field_date):
+    paid_in_first_week = []
+    for element in data:
+        account_key = element['account_key']
+        date_element = element[field_date]
+
+        if account_key in data_paid:
+            if date_element is not None:
+                delta = (date_element - data_paid[account_key])
+                if (delta.days < 7) and (delta.days >= 0):
+                    paid_in_first_week.append(element)
+    return paid_in_first_week
+
+
+def elements_group_account(data):
+    elements_by_account = defaultdict(list)
+    for element in data:
+        account_key = element['account_key']
+        elements_by_account[account_key].append(element)
+    return elements_by_account
+
+
+def sum_group_account(data, field_sum):
+    sum_by_account = {}
+    for account_key, field_list in data.items():
+        total_elements = 0
+        for element in field_list:
+            total_elements += element[field_sum]
+        sum_by_account[account_key] = total_elements
+    return sum_by_account
+
+
+def print_stastistics(list_values):
+    print('Mean:', np.mean(list_values))
+    print('Standard deviation:', np.std(list_values, axis=0))
+    print('Maximum:', np.max(list_values))
+    print('Minimum:', np.min(list_values))
+
+
 ''' 
 Read CSV
 Normalize keys
@@ -177,17 +216,7 @@ print(len(paid_students), 'students.')
 enrollments_paid = remove_trial_accounts(enrollments, paid_students)
 daily_engagement_paid = remove_trial_accounts(daily_engagement, paid_students)
 project_submissions_paid = remove_trial_accounts(project_submissions, paid_students)
-
-paid_engagement_in_first_week = []
-for engagement in daily_engagement_paid:
-    account_key = engagement['account_key']
-    utc_date = engagement['utc_date']
-
-    if account_key in paid_students:
-        if utc_date is not None:
-            delta = (utc_date - paid_students[account_key])
-            if (delta.days < 7) and (delta.days >= 0):
-                paid_engagement_in_first_week.append(engagement)
+paid_engagement_in_first_week = elements_in_first_week(daily_engagement_paid, paid_students, 'utc_date')
 
 print('\n')
 print('5. How many students worked for one week after enrollment?')
@@ -197,26 +226,13 @@ print(len(paid_engagement_in_first_week), 'students.')
 7. Calculate the average time spent for each student in the first week.
 '''
 
-engagement_by_account = defaultdict(list)
-for engagement in paid_engagement_in_first_week:
-    account_key = engagement['account_key']
-    engagement_by_account[account_key].append(engagement)
-
-total_minutes_by_account = {}
-for account_key, engagement_list in engagement_by_account.items():
-    total_minutes = 0
-    for engagement in engagement_list:
-        total_minutes += engagement['total_minutes_visited']
-    total_minutes_by_account[account_key] = total_minutes
-
+engagement_by_account = elements_group_account(paid_engagement_in_first_week)
+total_minutes_by_account = sum_group_account(engagement_by_account, 'total_minutes_visited')
 total_minutes = list(total_minutes_by_account.values())
 
 print('\n')
 print('7. Average time spent in one week of studies')
-print('Mean:', np.mean(total_minutes))
-print('Standard deviation:', np.std(total_minutes, axis=0))
-print('Maximum:', np.max(total_minutes))
-print('Minimum:', np.min(total_minutes))
+print_stastistics(total_minutes)
 
 
 '''
@@ -231,7 +247,16 @@ for account_key, minutes in total_minutes_by_account.items():
         student_with_max_minutes = account_key
 
 print('\n')
-print(student_with_max_minutes)
+print('8. Student with more study time')
+print('Enrollement:', student_with_max_minutes)
 
-for element in engagement_by_account[student_with_max_minutes]:
-    print(element)
+'''
+9. Investigate the student who has the most lessons completed
+'''
+
+total_lessons_completed_by_account = sum_group_account(engagement_by_account, 'lessons_completed')
+total_lessons_completed = list(total_lessons_completed_by_account.values())
+
+print('\n')
+print('9. Total activities carried out in one week of studies')
+print_stastistics(total_lessons_completed)
