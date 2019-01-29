@@ -1,8 +1,10 @@
 import unicodecsv
 import numpy as np
-import matplotlib.pyplot as plt
+import matplotlib
 from datetime import datetime
 from collections import defaultdict
+matplotlib.use("wxAgg")
+import matplotlib.pyplot as plt
 
 
 def read_csv(archive):
@@ -91,11 +93,15 @@ def sum_group_account(data, field_sum):
     return sum_by_account
 
 
-def print_stastistics(list_values):
+def print_stastistics(list_values, plot_graphic):
     print('Mean:', np.mean(list_values))
     print('Standard deviation:', np.std(list_values, axis=0))
     print('Maximum:', np.max(list_values))
     print('Minimum:', np.min(list_values))
+    if plot_graphic:
+        plt.plot(list_values)
+        plt.ylabel('values')
+        plt.show()
 
 ''' 
 Read CSV
@@ -231,7 +237,7 @@ total_minutes_by_account = sum_group_account(engagement_by_account, 'total_minut
 
 print('\n')
 print('7. Average time spent in one week of studies')
-print_stastistics(list(total_minutes_by_account.values()))
+print_stastistics(list(total_minutes_by_account.values()), False)
 
 
 '''
@@ -257,7 +263,7 @@ total_lessons_completed_by_account = sum_group_account(engagement_by_account, 'l
 
 print('\n')
 print('9. Total activities carried out in one week of studies')
-print_stastistics(list(total_lessons_completed_by_account.values()))
+print_stastistics(list(total_lessons_completed_by_account.values()), False)
 
 '''
 10. Investigate the number of days that students visit the courses
@@ -274,7 +280,7 @@ total_days_visit_by_account = sum_group_account(engagement_by_account, 'has_visi
 
 print('\n')
 print('10. Investigate the number of days that students visit the courses')
-print_stastistics(list(total_days_visit_by_account.values()))
+print_stastistics(list(total_days_visit_by_account.values()), False)
 
 '''
 11. Investigating approved and disapproved students
@@ -320,31 +326,30 @@ non_passing_engagement_minutes = sum_group_account(non_passing_engagement_by_acc
 
 print('\n')
 print('12. Statistically analyzing the result of the projects by time of visit, group PASSING')
-print_stastistics(list(passing_engagements_minutes.values()))
+print_stastistics(list(passing_engagements_minutes.values()), False)
 
 print('\n')
 print('12. Statistically analyzing the result of the projects by time of visit, group NON PASSING')
-print_stastistics(list(non_passing_engagement_minutes.values()))
+print_stastistics(list(non_passing_engagement_minutes.values()), False)
 
 passing_engagements_lessons = sum_group_account(passing_engagements_by_account, 'lessons_completed')
 non_passing_engagement_lessons = sum_group_account(non_passing_engagement_by_account, 'lessons_completed')
 
 print('\n')
 print('12. Statistically analyzing the result in the projects by lessons completed, group PASSING')
-print_stastistics(list(passing_engagements_lessons.values()))
+print_stastistics(list(passing_engagements_lessons.values()), False)
 
 print('\n')
 print('12. Statistically analyzing the result in the projects by lessons completed, group NON PASSING')
-print_stastistics(list(non_passing_engagement_lessons.values()))
+print_stastistics(list(non_passing_engagement_lessons.values()), False)
 
 passing_engagements_visits = sum_group_account(passing_engagements_by_account, 'has_visited')
 non_passing_engagement_visits = sum_group_account(non_passing_engagement_by_account, 'has_visited')
 
 print('\n')
 print('12. Statistically analyzing the result in the projects by numbers of visits, group PASSING')
-print_stastistics(list(passing_engagements_visits.values()))
+print_stastistics(list(passing_engagements_visits.values()), False)
 
 print('\n')
 print('12. Statistically analyzing the result in the projects by numbers of visits, group NON PASSING')
-print_stastistics(list(non_passing_engagement_visits.values()))
-plt.hist(list(non_passing_engagement_visits.values()))
+print_stastistics(list(non_passing_engagement_visits.values()), True)
