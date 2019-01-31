@@ -69,3 +69,80 @@ employment = pd.Series(employment_values, index=countries)
 country, value = max_employment(employment)
 print('The country with the highest salary and {} with a salary of {}'.format(country, value))
 print('\n')
+
+
+'''
+3. Teste seires index pandas
+'''
+
+serie1 = pd.Series([1, 2, 3, 4], index=['a', 'b', 'c', 'd'])
+serie2 = pd.Series([10, 20, 30, 40], index=['a', 'b', 'c', 'd'])
+print(serie1 + serie2)
+print('\n')
+
+serie1 = pd.Series([1, 2, 3, 4], index=['a', 'b', 'c', 'd'])
+serie2 = pd.Series([10, 20, 30, 40], index=['d', 'c', 'b', 'a'])
+print(serie1 + serie2)
+print('\n')
+
+serie1 = pd.Series([1, 2, 3, 4], index=['a', 'b', 'c', 'd'])
+serie2 = pd.Series([10, 20, 30, 40], index=['c', 'd', 'e', 'f'])
+print(serie1 + serie2)
+print('\n')
+print((serie1 + serie2).dropna())
+print('\n')
+
+serie1 = pd.Series([1, 2, 3, 4], index=['a', 'b', 'c', 'd'])
+serie2 = pd.Series([10, 20, 30, 40], index=['e', 'f', 'g', 'h'])
+print(serie1 + serie2)
+print('\n')
+
+serie1 = pd.Series([1, 2, 3, 4], index=['a', 'b', 'c', 'd'])
+serie2 = pd.Series([10, 20, 30, 40], index=['c', 'd', 'e', 'f'])
+print(serie1.add(serie2, fill_value=0))
+print('\n')
+
+'''
+3. converting a list of full names to last name, first name
+'''
+
+
+def reverse_names(name):
+    name = str(name)
+    name_reverse = None
+    full_name = name.split()
+    if len(full_name) == 2:
+        name_reverse = '{}, {}'.format(full_name[1], full_name[0])
+    return name_reverse
+
+
+names = pd.Series([
+    'Andre Agassi',
+    'Barry Bonds',
+    'Christopher Columbus',
+    'Daniel Defoe',
+    'Emilio Estevez',
+    'Fred Flintstone',
+    'Greta Garbo',
+    'Humbert Humbert',
+    'Ivan Ilych',
+    'James Joyce',
+    'Keira Knightley',
+    'Lois Lane',
+    'Mike Myers',
+    'Nick Nolte',
+    'Ozzy Osbourne',
+    'Pablo Picasso',
+    'Quirinus Quirrell',
+    'Rachael Ray',
+    'Susan Sarandon',
+    'Tina Turner',
+    'Ugueth Urbina',
+    'Vince Vaughn',
+    'Woodrow Wilson',
+    'Yoji Yamada',
+    'Zinedine Zidane'
+])
+
+names_reverse = names.apply(reverse_names)
+print(names_reverse)
