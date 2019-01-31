@@ -117,31 +117,12 @@ def reverse_names(name):
 
 
 names = pd.Series([
-    'Andre Agassi',
-    'Barry Bonds',
-    'Christopher Columbus',
-    'Daniel Defoe',
-    'Emilio Estevez',
-    'Fred Flintstone',
-    'Greta Garbo',
-    'Humbert Humbert',
-    'Ivan Ilych',
-    'James Joyce',
-    'Keira Knightley',
-    'Lois Lane',
-    'Mike Myers',
-    'Nick Nolte',
-    'Ozzy Osbourne',
-    'Pablo Picasso',
-    'Quirinus Quirrell',
-    'Rachael Ray',
-    'Susan Sarandon',
-    'Tina Turner',
-    'Ugueth Urbina',
-    'Vince Vaughn',
-    'Woodrow Wilson',
-    'Yoji Yamada',
-    'Zinedine Zidane'
+    'Andre Agassi', 'Barry Bonds', 'Christopher Columbus', 'Daniel Defoe',
+    'Emilio Estevez', 'Fred Flintstone', 'Greta Garbo', 'Humbert Humbert',
+    'Ivan Ilych', 'James Joyce', 'Keira Knightley', 'Lois Lane', 'Mike Myers',
+    'Nick Nolte', 'Ozzy Osbourne', 'Pablo Picasso', 'Quirinus Quirrell', 'Rachael Ray',
+    'Susan Sarandon', 'Tina Turner', 'Ugueth Urbina', 'Vince Vaughn', 'Woodrow Wilson',
+    'Yoji Yamada', 'Zinedine Zidane'
 ])
 
 names_reverse = names.apply(reverse_names)
