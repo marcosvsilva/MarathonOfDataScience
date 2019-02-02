@@ -8,6 +8,12 @@ def mean_riders_for_max_station(ridership):
     return overall_mean, mean_for_max
 
 
+def min_and_max_riders_per_day(ridership):
+    station_riders = ridership.mean(axis=0)
+    max_daily_ridership = station_riders.max()
+    min_daily_ridership = station_riders.min()
+    return max_daily_ridership, min_daily_ridership
+
 ridership = np.array([
     [0, 0, 2, 5, 0],
     [1478, 3877, 3674, 2328, 2539],
@@ -24,3 +30,7 @@ ridership = np.array([
 overall_mean, mean_for_max = mean_riders_for_max_station(ridership)
 print('The subway station in New York receives average of {} people'
       'from a total of {} people in five stations.'.format(int(overall_mean), int(mean_for_max)))
+
+max_daily_ridership, min_daily_ridership = min_and_max_riders_per_day(ridership)
+print('The maximum average in a subway station is {} and the minimum'
+      'is {}'.format(int(max_daily_ridership), int(min_daily_ridership)))
