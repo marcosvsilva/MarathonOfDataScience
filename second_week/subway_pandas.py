@@ -4,8 +4,8 @@ import numpy as np
 
 def mean_riders_for_max_station(ridership):
     max_station = ridership.iloc[0].idxmax()
-    overall_mean = ridership_df[max_station].mean()
-    mean_for_max = ridership_df.values.mean()
+    overall_mean = ridership[max_station].mean()
+    mean_for_max = ridership.values.mean()
     return overall_mean, mean_for_max
 
 
