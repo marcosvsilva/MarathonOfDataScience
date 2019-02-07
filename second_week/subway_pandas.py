@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 
 
 def mean_riders_for_max_station(ridership):
