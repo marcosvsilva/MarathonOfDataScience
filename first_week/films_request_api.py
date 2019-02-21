@@ -17,6 +17,7 @@ def mount_request(url, parameters):
     for key, value in parameters.items():
         url += '&' + key + '=' + urllib.parse.quote_plus(value)
 
+    print(url)
     return url
 
 

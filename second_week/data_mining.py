@@ -108,9 +108,9 @@ Read CSV
 Normalize keys
 '''
 
-enrollments = read_csv('dataset/enrollments.csv')
-daily_engagement = read_csv('dataset/daily_engagement.csv')
-project_submissions = read_csv('dataset/project_submissions.csv')
+enrollments = read_csv('../dataset/enrollments.csv')
+daily_engagement = read_csv('../dataset/daily_engagement.csv')
+project_submissions = read_csv('../dataset/project_submissions.csv')
 daily_engagement = change_column_acct(daily_engagement)
 
 ''' 
