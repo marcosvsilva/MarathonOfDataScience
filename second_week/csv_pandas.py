@@ -17,7 +17,7 @@ entries_and_exists = pd.DataFrame({
                1088317, 1088328, 1088331, 1088420, 1088753]
 })
 
-csv_directory = '../dataset/nyc_subway_weather.csv'
+csv_directory = 'dataset/nyc_subway_weather.csv'
 subway_weather = pd.read_csv(csv_directory)
 
 correlation_entries_anpressurei = correlation(subway_weather['ENTRIESn_hourly'], subway_weather['meanpressurei'])
