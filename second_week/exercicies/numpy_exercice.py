@@ -3,15 +3,18 @@ import numpy as np
 number_exercise = 1
 
 
-def print_exercice(arg):
+def print_exercice(arg: object = None):
     global number_exercise
-    print('exercice {}: {}'.format(number_exercise, arg))
+
+    if arg is not None:
+        print('exercice {}: {}'.format(number_exercise, arg))
+        print('\n')
+
     number_exercise += 1
-    print('\n')
 
 
 # Exercice 1 - Easy
-# Importe numpy como ‘np’ e imprima o número da versão.
+# Importe numpy como 'np' e imprima o número da versão.
 print_exercice(np.version.version)
 
 # Exercice 2 - Easy
@@ -20,12 +23,12 @@ arr = np.arange(10)
 print_exercice(arr)
 
 # Exercice 3 - Easy
-# Crie uma matriz booleana numpy 3×3 com ‘True’
+# Crie uma matriz booleana numpy 3×3 com 'True'
 arr = np.repeat(True, 3*3).reshape(3, -1)
 print_exercice(arr)
 
 # Exercice 4 - Easy
-# Extraia todos os números ímpares de ‘arr’
+# Extraia todos os números ímpares de 'arr'
 arr = np.arange(10)
 arr_mask = arr % 2 > 0
 print_exercice(arr[arr_mask])
@@ -39,7 +42,7 @@ print_exercice(arr)
 # Exercice 1 - Medium
 # Substitua todos os números ímpares em arr com -1 sem alterar arr
 arr = np.arange(10)
-print_exercice(arr)
+print_exercice()
 
 # Exercice 2 - Medium
 # Converta uma matriz 1D para uma matriz 2D com 2 linhas
@@ -62,9 +65,38 @@ matrix_merge = np.append(matrix_a, matrix_b, axis=1)
 print_exercice(matrix_merge)
 
 # Exercice 5 - Medium
-# Crie o seguinte padrão sem codificação, usando apenas funções numpy e a matriz de entrada abaixo ‘a’.
+# Crie o seguinte padrão sem codificação, usando apenas funções numpy e a matriz de entrada abaixo 'a'.
 arr = np.arange(1, 4, 1)
 arr_out = arr.repeat(3)
 for i in range(len(arr)):
     arr_out = np.append(arr_out, arr)
 print_exercice(arr_out)
+
+
+# Exercice 1 - Hard
+# Calcule a pontuação softmax de 'sepal length':
+
+url = 'dataset/iris.csv'
+iris_2d = np.genfromtxt(url, delimiter=',', dtype='float', usecols=[0, 1, 2, 3])
+print(iris_2d)
+
+# Exercice 2 - Hard
+# Filtre as linhas de iris_2d que possuem petallength (coluna 3) > 1.5 e sepallength (coluna 1) < 5.0
+
+# Exercice 3 - Hard
+# Selecione as linhas de iris_2d que não têm nenhum valor 'nan'
+
+
+# Exercice 1 - Hard
+# Calcule as contagens de valores únicos na linha.
+np.random.seed(100)
+arr = np.random.randint(1, 11, size=(6, 10))
+print(arr)
+
+
+# Exercice 2 - Hard
+# Encontre todos os picos em uma matriz 1D numpy 'a'. Picos são pontos cercados por valores menores em ambos os lados.
+
+
+# Exercice 1 - Hard
+# Calcule as codificações únicas (variáveis ​​binárias dummy para cada valor único na matriz)
