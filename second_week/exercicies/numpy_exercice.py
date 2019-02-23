@@ -88,7 +88,7 @@ print_exercice(softmax(iris[:, 1]))
 # Filtre as linhas de iris_2d que possuem petallength (coluna 3) > 1.5 e sepallength (coluna 1) < 5.0
 iris_petallength = iris[:, 2] > 1.5
 iris_sepallength = iris[:, 0] < 5.0
-print_exercice(iris)
+print_exercice(iris[iris_petallength])
 
 # Exercice 3 - Hard
 # Selecione as linhas de iris_2d que não têm nenhum valor 'nan'
