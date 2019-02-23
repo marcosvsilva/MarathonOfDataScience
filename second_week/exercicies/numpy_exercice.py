@@ -13,6 +13,10 @@ def print_exercice(arg: object = None):
     number_exercise += 1
 
 
+def softmax(x):
+    e_x = np.exp(x - np.max(x))
+    return e_x / e_x.sum(axis=0)
+
 # Exercice 1 - Easy
 # Importe numpy como 'np' e imprima o número da versão.
 print_exercice(np.version.version)
@@ -77,11 +81,14 @@ print_exercice(arr_out)
 # Calcule a pontuação softmax de 'sepal length':
 
 url = 'dataset/iris.csv'
-iris_2d = np.genfromtxt(url, delimiter=',', dtype='float', usecols=[0, 1, 2, 3])
-print(iris_2d)
+iris = np.genfromtxt(url, delimiter=',', usecols=[0, 1, 2, 3], skip_header=1)
+print_exercice(softmax(iris[:, 1]))
 
 # Exercice 2 - Hard
 # Filtre as linhas de iris_2d que possuem petallength (coluna 3) > 1.5 e sepallength (coluna 1) < 5.0
+iris_petallength = iris[:, 2] > 1.5
+iris_sepallength = iris[:, 0] < 5.0
+print_exercice(iris)
 
 # Exercice 3 - Hard
 # Selecione as linhas de iris_2d que não têm nenhum valor 'nan'
@@ -91,7 +98,6 @@ print(iris_2d)
 # Calcule as contagens de valores únicos na linha.
 np.random.seed(100)
 arr = np.random.randint(1, 11, size=(6, 10))
-print(arr)
 
 
 # Exercice 2 - Hard
