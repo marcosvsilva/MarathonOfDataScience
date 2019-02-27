@@ -16,19 +16,19 @@ def print_exercice(arg: object = None):
 
 # Exercice 1 - Easy
 # Importe Pandas e printe a versão
-print_exercice(pd._version)
+print_exercice(pd.__version__)
 
 # Exercice 2 - Easy
 # Crie uma série panda de cada um dos ítens abaixo: uma lista, numpy e um dicionário
-minhalista = list('abcedfghijklmnopqrstuvwxyz')
-meuarr = np.arange(26)
-meudict = dict(zip(mylist, myarr))
+mylist = list('abcedfghijklmnopqrstuvwxyz')
+myarr = np.arange(26)
+mydict = dict(zip(mylist, myarr))
 
 # Exercice 3 - Easy
 # Converta a série "ser" em um dataframe com seu índice como outra coluna no dataframe.
-minhalista = list('abcedfghijklmnopqrstuvwxyz')
-meuarr = np.arange(26)
-meudic = dict(zip(mylist, myarr))
+mylist = list('abcedfghijklmnopqrstuvwxyz')
+myarr = np.arange(26)
+mydict = dict(zip(mylist, myarr))
 ser = pd.Series(mydict)
 
 # Exercice 4 - Easy
