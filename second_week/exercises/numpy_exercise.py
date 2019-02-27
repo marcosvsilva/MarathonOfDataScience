@@ -77,20 +77,17 @@ for i in range(len(arr)):
 print_exercice(arr_out)
 
 
+# Dataset para exercícios hard.
+url = 'dataset/iris.csv'
+
 # Exercice 1 - Hard
 # Calcule a pontuação softmax de 'sepal length':
-
-url = 'dataset/iris.csv'
 iris = np.genfromtxt(url, delimiter=',', usecols=[0, 1, 2, 3], skip_header=1)
 print_exercice(softmax(iris[:, 1]))
 
 # Exercice 2 - Hard
 # Filtre as linhas de iris_2d que possuem petallength (coluna 3) > 1.5 e sepallength (coluna 1) < 5.0
-iris_petallength = iris[:, 2] > 1.5
-iris_sepallength = iris[:, 0] < 5.0
-iris_mask = iris_petallength
-np.append(iris_mask, iris_sepallength)
-print_exercice(iris[iris_mask])
+
 
 # Exercice 3 - Hard
 # Selecione as linhas de iris_2d que não têm nenhum valor 'nan'
@@ -104,7 +101,10 @@ arr = np.random.randint(1, 11, size=(6, 10))
 
 # Exercice 2 - Hard
 # Encontre todos os picos em uma matriz 1D numpy 'a'. Picos são pontos cercados por valores menores em ambos os lados.
+a = np.array([1, 3, 7, 1, 2, 6, 0, 1])
 
 
-# Exercice 1 - Hard
+# Exercice 3 - Hard
 # Calcule as codificações únicas (variáveis ​​binárias dummy para cada valor único na matriz)
+np.random.seed(101)
+arr = np.random.randint(1, 4, size=6)
