@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import string
 
 number_exercise = 1
 
@@ -20,9 +21,10 @@ print_exercice(pd.__version__)
 
 # Exercice 2 - Easy
 # Crie uma série panda de cada um dos ítens abaixo: uma lista, numpy e um dicionário
-mylist = list('abcedfghijklmnopqrstuvwxyz')
-myarr = np.arange(26)
-mydict = dict(zip(mylist, myarr))
+list_alphabet = pd.Series([string.ascii_lowercase])
+list_arange = pd.Series(range(26))
+teste = dict({list_arange: list_alphabet})
+print(teste)
 
 # Exercice 3 - Easy
 # Converta a série "ser" em um dataframe com seu índice como outra coluna no dataframe.
