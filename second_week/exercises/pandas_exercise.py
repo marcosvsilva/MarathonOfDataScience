@@ -23,8 +23,9 @@ print_exercice(pd.__version__)
 # Crie uma série panda de cada um dos ítens abaixo: uma lista, numpy e um dicionário
 list_alphabet = pd.Series([string.ascii_lowercase])
 list_arange = pd.Series(range(26))
-teste = dict({list_arange: list_alphabet})
-print(teste)
+test = [list_arange.to_dict(),
+        list_alphabet.to_dict()]
+print_exercice(test)
 
 # Exercice 3 - Easy
 # Converta a série "ser" em um dataframe com seu índice como outra coluna no dataframe.
