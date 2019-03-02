@@ -22,7 +22,7 @@ print_exercice(pd.__version__)
 # Exercice 2 - Easy
 # Crie uma série panda de cada um dos ítens abaixo: uma lista, numpy e um dicionário
 list_alphabet = pd.Series([string.ascii_lowercase])
-list_arange = pd.Series(range(26))s
+list_arange = pd.Series(range(26))
 test = list_alphabet.combine(list_alphabet, lambda x1, x2: {x1: x2})
 print(test)
 test = [list_arange.to_dict(),
@@ -43,7 +43,8 @@ ser2 = pd.Series(np.arange(26))
 
 # Exercice 5 - Easy
 #  Atribua um nome a série "ser" chamando-a de 'alfabeto'.
-ser = pd.Series([string.ascii_lowercase])
+alphabet = pd.Series([string.ascii_lowercase])
+print_exercice(alphabet)
 
 # Exercice 1 - Medium
 # Da variável 'ser', remova os ítens presentes em 'ser2'
