@@ -22,26 +22,28 @@ print_exercice(pd.__version__)
 # Exercice 2 - Easy
 # Crie uma série panda de cada um dos ítens abaixo: uma lista, numpy e um dicionário
 list_alphabet = pd.Series([string.ascii_lowercase])
-list_arange = pd.Series(range(26))
+list_arange = pd.Series(range(26))s
+test = list_alphabet.combine(list_alphabet, lambda x1, x2: {x1: x2})
+print(test)
 test = [list_arange.to_dict(),
         list_alphabet.to_dict()]
 print_exercice(test)
 
 # Exercice 3 - Easy
 # Converta a série "ser" em um dataframe com seu índice como outra coluna no dataframe.
-mylist = list('abcedfghijklmnopqrstuvwxyz')
-myarr = np.arange(26)
+mylist = pd.Series([string.ascii_lowercase])
+myarr = pd.Series(range(26))
 mydict = dict(zip(mylist, myarr))
 ser = pd.Series(mydict)
 
 # Exercice 4 - Easy
 # Combine 'ser1' e 'ser2' para formar um dataframe
-ser1 = pd.Series(list('abcedfghijklmnopqrstuvwxyz'))
+ser1 = pd.Series([string.ascii_lowercase])
 ser2 = pd.Series(np.arange(26))
 
 # Exercice 5 - Easy
 #  Atribua um nome a série "ser" chamando-a de 'alfabeto'.
-ser = pd.Series(list('abcedfghijklmnopqrstuvwxyz'))
+ser = pd.Series([string.ascii_lowercase])
 
 # Exercice 1 - Medium
 # Da variável 'ser', remova os ítens presentes em 'ser2'
