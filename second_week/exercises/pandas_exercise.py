@@ -52,8 +52,8 @@ ser2 = pd.Series(range(4, 9))
 
 # Exercice 2 - Medium
 # Obtenha todos os ítens de 'ser1' e 'ser2' não comum a ambos.
-ser1 = pd.Series([1, 2, 3, 4, 5])
-ser2 = pd.Series([4, 5, 6, 7, 8])
+ser1 = pd.Series(range(1, 6))
+ser2 = pd.Series(range(4, 9))
 
 # Exercice 3 - Medium
 # Calcule o mínimo, 25º percentil, mediana, 75º e o máximo de 'ser':
