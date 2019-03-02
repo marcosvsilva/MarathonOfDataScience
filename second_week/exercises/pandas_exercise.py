@@ -47,8 +47,8 @@ ser = pd.Series([string.ascii_lowercase])
 
 # Exercice 1 - Medium
 # Da variável 'ser', remova os ítens presentes em 'ser2'
-ser1 = pd.Series([1, 2, 3, 4, 5])
-ser2 = pd.Series([4, 5, 6, 7, 8])
+ser1 = pd.Series(range(1, 6))
+ser2 = pd.Series(range(4, 9))
 
 # Exercice 2 - Medium
 # Obtenha todos os ítens de 'ser1' e 'ser2' não comum a ambos.
