@@ -23,15 +23,12 @@ print_exercice(pd.__version__)
 # Crie uma série panda de cada um dos ítens abaixo: uma lista, numpy e um dicionário
 list_alphabet = pd.Series([string.ascii_lowercase])
 list_arange = pd.Series(range(26))
-test = list_alphabet.combine(list_alphabet, lambda x1, x2: {x1: x2})
-print(test)
-test = [list_arange.to_dict(),
-        list_alphabet.to_dict()]
-print_exercice(test)
+print(list_alphabet)
+print(list_arange)
 
 # Exercice 3 - Easy
 # Converta a série "ser" em um dataframe com seu índice como outra coluna no dataframe.
-mylist = pd.Series([string.ascii_lowercase])
+mylist = pd.Series([string.ascii_lowercase], axis=1)
 myarr = pd.Series(range(26))
 mydict = dict(zip(mylist, myarr))
 ser = pd.Series(mydict)
