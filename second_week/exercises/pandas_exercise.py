@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import string
+from collections import OrderedDict, defaultdict
 
 number_exercise = 1
 
@@ -13,6 +14,23 @@ def print_exercice(arg: object = None):
         print('\n')
 
     number_exercise += 1
+
+
+def convert_to_ordinal(value):
+    ordinal = ''
+    if value % 100 // 10 != 1:
+        if value % 10 == 1:
+            ordinal = u"%d%s" % (value, "st")
+        elif value % 10 == 2:
+            ordinal = u"%d%s" % (value, "nd")
+        elif value % 10 == 3:
+            ordinal = u"%d%s" % (value, "rd")
+        else:
+            ordinal = u"%d%s" % (value, "th")
+    else:
+        ordinal = u"%d%s" % (value, "th")
+
+    return ordinal
 
 
 # Exercice 1 - Easy
@@ -38,7 +56,7 @@ print_exercice(dataframe)
 # Exercice 4 - Easy
 # Combine 'ser1' e 'ser2' para formar um dataframe
 alphabet = pd.Series([str(char) for char in string.ascii_lowercase])
-arange = pd.Series(np.arange(26))
+arange = pd.Series(len(string.ascii_lowercase))
 dataframe = pd.concat([alphabet, arange], axis=1)
 print_exercice(dataframe)
 
@@ -51,24 +69,50 @@ print_exercice(alphabet)
 # Da variável 'ser', remova os ítens presentes em 'ser2'
 ser1 = pd.Series(range(1, 6))
 ser2 = pd.Series(range(4, 9))
+ser1_mask = ser1.apply(lambda x: x not in ser2.values)
+ser1 = ser1[ser1_mask]
+print_exercice(ser1)
 
 # Exercice 2 - Medium
 # Obtenha todos os ítens de 'ser1' e 'ser2' não comum a ambos.
 ser1 = pd.Series(range(1, 6))
 ser2 = pd.Series(range(4, 9))
+ser1_mask = ser1.apply(lambda x: x not in ser2.values)
+ser2_mask = ser2.apply(lambda x: x not in ser1.values)
+ser_unsual = pd.concat([ser1[ser1_mask], ser2[ser2_mask]], axis=0, ignore_index=True)
+print_exercice(ser_unsual)
 
 # Exercice 3 - Medium
 # Calcule o mínimo, 25º percentil, mediana, 75º e o máximo de 'ser':
 ser = pd.Series(np.random.normal(10, 5, 25))
+str_result = 'min = {} \n' \
+             'percentile 25 = {} \n' \
+             'median = {} \n' \
+             'percentile 75 = {} \n' \
+             'max = {}'.format(ser.min(), ser.quantile(0.25), ser.median(), ser.quantile(0.750), ser.max())
+print_exercice(str_result)
 
 # Exercice 4 - Medium
 # Da variável 'ser', matenha os 2 ítens mais frequentes como estão e substitua tod-o o resto por 'Outro'.
 np.random.RandomState(100)
 ser = pd.Series(np.random.randint(1, 5, [12]))
+max_repeat = ser.value_counts().idxmax()
+ser = ser.apply(lambda x: x == max_repeat and x or -1)
+print_exercice(ser)
+
 
 # Exercice 5 - Medium
-# Coloque a série ‘ser’ em 10 decílios(decile) iguais e substitua os valores pelo nome da bandeja(bin)
+# Coloque a série 'ser' em 10 decílios(decile) iguais e substitua os valores pelo nome da bandeja(bin)
 ser = pd.Series(np.random.random(20))
+ordered = pd.Series(ser.sort_values(ascending=True).values)
+
+positions = ''
+for i in range(5):
+    positions = positions + '{}, '.format(convert_to_ordinal(ser[ser == ordered[i]].index.values+1))
+cut = len(positions)-2
+
+print_exercice(positions[1:cut])
+
 
 # Exercice 1 - Hard
 # Da variável 'ser' extraia palavras que contenham 2 vogais ou mais:
