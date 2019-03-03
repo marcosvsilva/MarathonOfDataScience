@@ -21,26 +21,30 @@ print_exercice(pd.__version__)
 
 # Exercice 2 - Easy
 # Crie uma série panda de cada um dos ítens abaixo: uma lista, numpy e um dicionário
-list_alphabet = pd.Series([string.ascii_lowercase])
-list_arange = pd.Series(range(26))
-print(list_alphabet)
-print(list_arange)
+alphabet = pd.Series([str(char) for char in string.ascii_lowercase])
+arange = pd.Series(range(26))
+relationship = pd.concat([alphabet, arange], axis=1)
+print_exercice(relationship)
 
 # Exercice 3 - Easy
 # Converta a série "ser" em um dataframe com seu índice como outra coluna no dataframe.
-mylist = pd.Series([string.ascii_lowercase], axis=1)
-myarr = pd.Series(range(26))
-mydict = dict(zip(mylist, myarr))
-ser = pd.Series(mydict)
+alphabet = list('abcedfghijklmnopqrstuvwxyz')
+arange = np.arange(26)
+dic = dict(zip(alphabet, arange))
+serie = pd.Series(dic)
+dataframe = serie.to_frame()
+print_exercice(dataframe)
 
 # Exercice 4 - Easy
 # Combine 'ser1' e 'ser2' para formar um dataframe
-ser1 = pd.Series([string.ascii_lowercase])
-ser2 = pd.Series(np.arange(26))
+alphabet = pd.Series([str(char) for char in string.ascii_lowercase])
+arange = pd.Series(np.arange(26))
+dataframe = pd.concat([alphabet, arange], axis=1)
+print_exercice(dataframe)
 
 # Exercice 5 - Easy
 #  Atribua um nome a série "ser" chamando-a de 'alfabeto'.
-alphabet = pd.Series([string.ascii_lowercase])
+alphabet = pd.Series([str(char) for char in string.ascii_lowercase], name='alphabet')
 print_exercice(alphabet)
 
 # Exercice 1 - Medium
