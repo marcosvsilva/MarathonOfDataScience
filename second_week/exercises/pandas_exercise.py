@@ -118,10 +118,14 @@ print_exercice(positions[1:cut])
 # Da variável 'ser' extraia palavras que contenham 2 vogais ou mais:
 ser = pd.Series(['Apple', 'Orange', 'Plan', 'Python', 'Money'])
 
+
 # Exercice 2 - Hard
 # Extraia emails válidos da série 'emails'. O padrão de regex para emails válidos é fornecido em 'padrao'.
-emails = pd.Series(['buying books at amazom.com', 'rameses@egypt.com', 'matt@t.co', 'narendra@modi.com'])
-padrao ='[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}'
+emails = pd.Series(['buying books at amazom.com',
+                    'rameses@egypt.com',
+                    'matt@t.co',
+                    'narendra@modi.com'])
+regex ='[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}'
 
 # Exercice 3 - Hard
 # Obtenha as posições de picos(valores cercados por valores menores em ambos lados) da variável 'ser'.
