@@ -118,7 +118,6 @@ print_exercice(positions[1:cut])
 # Da variável 'ser' extraia palavras que contenham 2 vogais ou mais:
 ser = pd.Series(['Apple', 'Orange', 'Plan', 'Python', 'Money'])
 
-
 # Exercice 2 - Hard
 # Extraia emails válidos da série 'emails'. O padrão de regex para emails válidos é fornecido em 'padrao'.
 emails = pd.Series(['buying books at amazom.com',
@@ -130,3 +129,16 @@ regex ='[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}'
 # Exercice 3 - Hard
 # Obtenha as posições de picos(valores cercados por valores menores em ambos lados) da variável 'ser'.
 ser = pd.Series([2, 10, 3, 4, 9, 10, 2, 7, 3])
+
+employment_values = ([
+    55.70000076, 51.40000153, 50.5, 75.69999695,
+    58.40000153, 40.09999847, 61.5, 57.09999847,
+    60.90000153, 66.59999847, 60.40000153, 68.09999847,
+    66.90000153, 53.40000153, 48.59999847, 56.79999924,
+    71.59999847, 58.40000153, 70.40000153, 41.20000076
+])
+
+employment = pd.Series(employment_values, index=countries)
+country, value = max_employment(employment)
+print('The country with the highest salary and {} with a salary of {}'.format(country, value))
+print('\n')
