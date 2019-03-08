@@ -17,7 +17,6 @@ def print_exercice(arg: object = None):
 
 
 def convert_to_ordinal(value):
-    ordinal = ''
     if value % 100 // 10 != 1:
         if value % 10 == 1:
             ordinal = u"%d%s" % (value, "st")
@@ -116,7 +115,16 @@ print_exercice(positions[1:cut])
 
 # Exercice 1 - Hard
 # Da variável 'ser' extraia palavras que contenham 2 vogais ou mais:
+vowel = pd.Series(['a', 'e', 'i', 'o', 'u'])
 ser = pd.Series(['Apple', 'Orange', 'Plan', 'Python', 'Money'])
+for item in ser:
+    for char in item:
+        #print(char)
+        #print(item)
+        if lower(vowel) in vowel:
+            print(item)
+
+
 
 # Exercice 2 - Hard
 # Extraia emails válidos da série 'emails'. O padrão de regex para emails válidos é fornecido em 'padrao'.
