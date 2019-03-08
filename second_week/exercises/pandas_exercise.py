@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import string
-from collections import OrderedDict, defaultdict
+import re
 
 number_exercise = 1
 
@@ -115,24 +115,18 @@ print_exercice(positions[1:cut])
 
 # Exercice 1 - Hard
 # Da variável 'ser' extraia palavras que contenham 2 vogais ou mais:
-vowel = pd.Series(['a', 'e', 'i', 'o', 'u'])
 ser = pd.Series(['Apple', 'Orange', 'Plan', 'Python', 'Money'])
-for item in ser:
-    for char in item:
-        #print(char)
-        #print(item)
-        if lower(vowel) in vowel:
-            print(item)
-
+vowel = re.compile("[aeiou]")
+ser_mask = ser.apply(lambda x: len(vowel.findall(x)) > 1)
+print_exercice(ser[ser_mask])
 
 
 # Exercice 2 - Hard
 # Extraia emails válidos da série 'emails'. O padrão de regex para emails válidos é fornecido em 'padrao'.
-emails = pd.Series(['buying books at amazom.com',
-                    'rameses@egypt.com',
-                    'matt@t.co',
-                    'narendra@modi.com'])
-regex ='[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}'
+emails = pd.Series(['buying books at amazom.com', 'rameses@egypt.com', 'matt@t.co', 'narendra@modi.com'])
+regex = re.compile('[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}')
+emails_mask = emails.apply(lambda x: regex.search(x) is not None)
+print_exercice(emails[emails_mask])
 
 # Exercice 3 - Hard
 # Obtenha as posições de picos(valores cercados por valores menores em ambos lados) da variável 'ser'.
