@@ -129,5 +129,10 @@ emails_mask = emails.apply(lambda x: regex.search(x) is not None)
 print_exercice(emails[emails_mask])
 
 # Exercice 3 - Hard
-# Obtenha as posições de picos(valores cercados por valores menores em ambos lados) da variável 'ser'.
+# Obtenha as posições de picos(valores cercado por valores menores em ambos lados) da variável 'ser'.
 ser = pd.Series([2, 10, 3, 4, 9, 10, 2, 7, 3])
+peak = []
+for index in range(1, len(ser)-1):
+    if (ser[index] > ser[index-1]) and (ser[index] > ser[index+1]):
+        peak.append(index)
+print_exercice(peak)
